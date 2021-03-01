@@ -22,7 +22,7 @@
       <Button id="W_full" onClick="Global/button_onClick">1</Button>
     </Cell>
     <Cell>
-      <InputField id="inputGuid" onEndEdit="Global/inputGuid_onEndEdit">guid</InputField>
+      <Text id="inputGuid"></Text>
     </Cell>
     <Cell>
       <Button id="E_half" onClick="Global/button_onClick">½</Button>
