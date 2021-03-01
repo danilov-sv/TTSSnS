@@ -16,7 +16,39 @@ cover_settings = {
 figurines = {}
 active_figurine = nil
 
-function onLoad()
+function onLoad(save_state)
+  print(save_state)
+  state = JSON.decode(save_state)
+
+  for fig_guid, fig in pairs(state.figurines) do
+    figurines[fig_guid] = { figurine = getObjectFromGUID(fig_guid) }
+    for dir, cover_guid in pairs(fig) do
+      figurines[fig_guid][dir] = getObjectFromGUID(cover_guid)
+    end
+  end
+
+end
+
+function onSave()
+  state = {
+    figurines = {}
+  }
+
+  for fig_guid,fig in pairs(figurines) do
+    state.figurines[fig_guid] = {}
+    for dir, _ in pairs(cover_settings) do
+      if fig[dir] ~= nil then
+        state.figurines[fig_guid][dir] = fig[dir].guid
+      end
+    end
+  end
+
+  if active_figurine ~= nil then
+    state.active_figurine = active_figurine.guid
+  end
+
+  save_state = JSON.encode_pretty(state)
+  return save_state
 end
 
 function inputGuid_onEndEdit(player, guid, senderGuid)
