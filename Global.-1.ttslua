@@ -17,7 +17,7 @@ figurines = {}
 active_figurine = nil
 
 function onLoad(save_state)
-  print(save_state)
+  --print(save_state)
   state = JSON.decode(save_state)
 
   for fig_guid, fig in pairs(state.figurines) do
@@ -52,7 +52,7 @@ function onSave()
 end
 
 function inputGuid_onEndEdit(player, guid, senderGuid)
-    print(player.color .. ' changes figurine guid to ' .. guid)
+    --print(player.color .. ' changes figurine guid to ' .. guid)
 
     setActiveFigurine(getObjectFromGUID(guid))
 
