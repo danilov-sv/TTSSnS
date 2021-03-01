@@ -1,0 +1,124 @@
+cover_settings = {
+    NW = { offset = Vector.new(-0.4,  1,  0.5),   angle = -45 },
+    N =  { offset = Vector.new(0,     1,  0.5),   angle = 0 },
+    NE = { offset = Vector.new(0.4,   1,  0.5),   angle = 45 },
+    E =  { offset = Vector.new(0.5,   1,  0),     angle = 90},
+    SE = { offset = Vector.new(0.4,   1,  -0.5),  angle = -45},
+    S =  { offset = Vector.new(0,     1,  -0.5),  angle = 0},
+    SW = { offset = Vector.new(-0.4,  1,  -0.5),  angle = 45},
+    W =  { offset = Vector.new(-0.5,  1,  0),     angle = 90},
+    full = { path = "http://cloud-3.steamusercontent.com/ugc/1666853724054177825/5BB8B5B20E177A808D868F2BFF8A142FEF17130E/" },
+    half = { path = "http://cloud-3.steamusercontent.com/ugc/1666853724054179156/37C9E1ED43C1539ACA0591CA95AB0370D820A897/" }
+
+}
+
+
+figurines = {}
+active_figurine = nil
+
+function onLoad()
+end
+
+function inputGuid_onEndEdit(player, guid, senderGuid)
+    print(player.color .. ' changes figurine guid to ' .. guid)
+
+    setActiveFigurine(getObjectFromGUID(guid))
+
+end
+
+function setActiveFigurine(figurine)
+  if figurine == nil then
+      print('There is no ' .. guid)
+      return
+  end
+
+  if figurines[figurine.guid] == nil then
+      figurines[figurine.guid] = { figurine = figurine }
+  end
+
+  active_figurine = figurine
+
+end
+
+function button_onClick(player, _, senderId)
+    print(senderId .. ' clicked')
+    if active_figurine == nil then
+        print('No active figurine')
+        return
+    end
+
+    local direction = string.sub(senderId,0,string.find(senderId, '_')-1)
+    local strength = string.sub(senderId,string.find(senderId, '_')+1,string.len(senderId))
+
+    if figurines[active_figurine.guid][direction] ~= nil then
+        local cover = figurines[active_figurine.guid][direction]
+        destroyObject(cover)
+        figurines[active_figurine.guid][direction] = nil
+    else
+        local cover = addCover(active_figurine, direction, strength)
+        figurines[active_figurine.guid][direction] = cover
+    end
+
+end
+
+function addCover(figurine, direction, strength)
+    local params = {
+      type = 'Card',
+      custom = {},
+      position = figurine.getPosition() + cover_settings[direction].offset,
+      rotation = {90, cover_settings[direction].angle, 0},
+      scale = {0.5, 0.5, 0.5},
+      callback = "addCover_callback",
+      sound = nil
+    }
+
+    params.custom = {
+            face = cover_settings[strength].path,
+            back = cover_settings[strength].path,
+            thickness = 0.2,
+            standup = true,
+            stackable = false
+        }
+
+    cover = spawnObject(params)
+    cover.setCustomObject(params.custom)
+    return cover
+end
+
+function addCover_callback(cover)
+  cover.setLock(true)
+  cover.jointTo(active_figurine, {
+    type = "Fixed",
+    collision = false
+  })
+end
+
+function removeCover(figurine, direction)
+  if figurines[figurine.guid] == nil
+    then return end
+
+  if figurines[figurine.guid][direction] == nil
+    then return end
+
+  destroyObject(figurines[figurine.guid][direction])
+  figurines[figurine.guid][direction] = nil
+end
+
+function onObjectDrop(colorName, obj)
+  setActiveFigurine(obj)
+end
+
+function onObjectPickUp(player_color, picked_up_object)
+
+  if figurines[picked_up_object.guid] == nil
+    then return end
+
+  removeCover(picked_up_object, "NW")
+  removeCover(picked_up_object, "N")
+  removeCover(picked_up_object, "NE")
+  removeCover(picked_up_object, "E")
+  removeCover(picked_up_object, "SE")
+  removeCover(picked_up_object, "S")
+  removeCover(picked_up_object, "SW")
+  removeCover(picked_up_object, "W")
+end

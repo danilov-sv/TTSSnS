@@ -1,0 +1,46 @@
+<!-- Xml UI. See documentation: https://api.tabletopsimulator.com/ui/introUI/ -->
+<TableLayout height="100" width="200"
+  returnToOriginalPositionWhenReleased="false"
+  allowDragging="true">
+  <Row>
+    <Cell>
+      <Button id="NW_half" onClick="Global/button_onClick">½</Button>
+      <Button id="NW_full" onClick="Global/button_onClick">1</Button>
+    </Cell>
+    <Cell>
+      <Button id="N_half" onClick="Global/button_onClick">½</Button>
+      <Button id="N_full" onClick="Global/button_onClick">1</Button>
+    </Cell>
+    <Cell>
+      <Button id="NE_half" onClick="Global/button_onClick">½</Button>
+      <Button id="NE_full" onClick="Global/button_onClick">1</Button>
+    </Cell>
+  </Row>
+  <Row>
+    <Cell>
+      <Button id="W_half" onClick="Global/button_onClick">½</Button>
+      <Button id="W_full" onClick="Global/button_onClick">1</Button>
+    </Cell>
+    <Cell>
+      <InputField id="inputGuid" onEndEdit="Global/inputGuid_onEndEdit">guid</InputField>
+    </Cell>
+    <Cell>
+      <Button id="E_half" onClick="Global/button_onClick">½</Button>
+      <Button id="E_full" onClick="Global/button_onClick">1</Button>
+    </Cell>
+  </Row>
+  <Row>
+    <Cell>
+      <Button id="SW_half" onClick="Global/button_onClick">½</Button>
+      <Button id="SW_full" onClick="Global/button_onClick">1</Button>
+    </Cell>
+    <Cell>
+      <Button id="S_half" onClick="Global/button_onClick">½</Button>
+      <Button id="S_full" onClick="Global/button_onClick">1</Button>
+    </Cell>
+    <Cell>
+      <Button id="SE_half" onClick="Global/button_onClick">½</Button>
+      <Button id="SE_full" onClick="Global/button_onClick">1</Button>
+    </Cell>
+  </Row>
+</TableLayout>
